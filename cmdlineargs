@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+
+import sys
+
+#Slicing from index 1 to no end, allow us to print all arguments provided but no the script
+print(f"Positional arguments are {sys.argv[1:]}")
+print(f"All arguments are {sys.argv}")
+print(sys.argv)
+#sys.arg is a list of all arguments provided, including the script name as index 0 of the list
+
+

@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+import argparse
+
+#A parser object is created using the ArgumentParser class of the argparse package.
+parser = argparse.ArgumentParser(description='Read a file in reverse')
+
+#Arguments belonging to the parser "parser"
+parser.add_argument('filename', help='The file to read') # Some arguments are not optional like a filename without --
+
+#Other optional arguments to provide more functionality to the script.·
+#Also setted with options to control how the argument will behave.
+#In this case, we have an automatic casting to an integer so a number must be provided
+parser.add_argument('--limit', '-l', type=int, help='The number of lines to read')
+
+#We can provide built in actions to arguments like the 'version' action
+#If this argument is passed it will override the others as an action is defined to be done, in this case version action
+parser.add_argument('--version', '-v', action='version', version='%(prog)s 1.0')
+
+#Args variable to save the contents of the parse_args() method of our parser. Returns the namespace object with data of the flags passed to the parser. Like Namespace(filename=something, limit=a_number)
+args = parser.parse_args()
+
+#We can print all the name space just calling args or we can print individual attributes with args.filename for instance
+#print(args.filename, args.limit)
+
+#The next block what is doing is with this file open (a file must be open in order to read it) as variable f:
+# - open is a context manager. It opens the file in read mode by default. Unless other mode is stated like: `open(file, 'w')` for writing
+# - with ... as block provides a wrapper. Using this ensures that the file will be properly closed as every context manager must be closed after use it. So no need of close() method
+# - f acts as a variable and a file object storage to whatever open method returns. This is used to perform operations
+# Filename in this case is a call of the args variable and its filename value
+with open(args.filename) as f:
+    lines = f.readlines() #lines will be a list of the lines of the provided file. The f is the destination of the file object. The readlines method is a file method.
+    lines.reverse() #The reverse method reverses the order of a list. So the lasts will be the first and so. It modifies the list, not creates a new one.
+
+    if args.limit: #If a limit is povided, args.limit will not be None so this if block will evaluate to True
+        lines = lines[:args.limit] #This is setting lines to only the limit provided. It will store from the 0 index to whatever the limit is with the notation list[:N]
+
+    for line in lines:
+        print(line.strip()[::-1])
+        #The readlines() method puts a newline character into every line, leading to an extra line every newline. To avoid this, the strip method removes those trailing /n characters on every string
+        #And the slice of [::-1] notation as compared with [start:stop:step] there is no start, no stop and step is defined as -1 meaning that will start from the last character of the string and from there will iterate until the first element.
+        # - if start is omitted, defaults from the beggining
+        # - if stop is omitted, defaults to the end
+        # - if step is omitted, default is 1. This is commonly ommited in notations [2:6] or [4:] [:5]

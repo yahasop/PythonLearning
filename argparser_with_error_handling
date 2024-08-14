@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+
+import argparse
+
+import sys
+
+parser = argparse.ArgumentParser(description='Read a file in reverse')
+
+parser.add_argument('filename', help='The file to read')
+
+parser.add_argument('--limit', '-l', type=int, help='The number of lines to read')
+
+parser.add_argument('--version', '-v', action='version', version='%(prog)s 1.0')
+
+args = parser.parse_args()
+
+
+try:
+    f = open(args.filename) #We encapsulate in the try block what we think could fail. In this case there could be errors when providing the filename.
+#except: #Except statement can be
+except FileNotFoundError as err: #We can set what error type we expect and handle it to a variable. In this case "err"
+    #print(f"Error: {err}") #We will show the default error message for FileNotFoundError stored in the "err" variable
+    print(f"Error: no file was found with that name")
+    sys.exit(2) #We can also set exit codes for Python scripts. In this case a 2 exit code will be thrown. Anything but zero is considered an error code. 0 is succesful execution
+else:
+    with f: #Originally we had with open(filename) as f, but we had opened the file in the try block
+        lines = f.readlines()
+        lines.reverse()
+
+        if args.limit:
+            lines = lines[:args.limit]
+
+        for line in lines:
+            print(line.strip()[::-1])
+finally:
+    print("We are done!")
+
+
+
+
+
+
+
+# This is the basic structure of a try-except-else-finally block. Finally is optional
+#try:
+        # Code that might raise an exception
+#except SomeException as e:
+        # Code to handle the exception
+#else:
+        # Code to execute if no exceptions were raised
+#finally:
+        # Code that will always execute

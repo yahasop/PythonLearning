@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+import argparse
+
+parser = argparse.ArgumentParser(description="Search for words including partial word")
+parser.add_argument('snippet', help='partial or complete string to search for words')
+
+args = parser.parse_args() #store the parser arguments in args
+snippet = args.snippet.lower() #takes the snippet (argument) and lowercase it
+
+with open('/usr/share/dict/words') as f: #Open the file words in the path to be read, default mode
+    words = f.readlines() #This generates a list with all the words in the given path and a trailing \n character
+
+'''
+######## NORMAL METHOD #########
+matches = [] # A new list to store the values from the query below
+
+for word in words: #Iterate over all words list generated with the with statement
+    if snippet in word.lower(): # compares if snippet is in the current lowered iteration. word is a temp variable and its value is the one in whatever iteration the for loop is at
+        matches.append(word.strip()) # This appends all the matching words. The strip() method will remove the \n trailing characters in strings
+
+print(matches)
+'''
+
+######## LIST COMPREHENSION METHOD #########
+
+print([word.strip() for word in words if snippet in word.lower()])
+
+'''
+Instead of creating a new list to append each found value by the for loop we can create the same for loop in a single liner like this:
+[expression for item in iterable]
+- Expression is what will be included in each operation and onto the list
+For example a 1 to 10 squared numbers lists would be:
+print([x**2 for x in range(11)])
+So this means I want x**2 value on every iteration of the for loop
+'''
